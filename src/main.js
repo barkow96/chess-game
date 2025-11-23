@@ -61,7 +61,7 @@ headerDiv.addEventListener("click", init);
 
 //MAIN FUNCTION - PERFORMING OPERATIONS BY CLICKING THE FIGURES
 export default function performAction(event) {
-	const div = event.composedPath[0];
+	const div = event.composedPath()[0];  // Wywołanie metody z nawiasami ()
 	let x,y;
 
 	//READING THE COORDINATES OF THE CLICK-EVENT
