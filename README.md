@@ -26,7 +26,7 @@ A fully functional chess game with implementation of all classic moves, includin
 
 ```bash
 git clone <repository-url>
-cd 8_ChessGame
+cd chess-game
 ```
 
 2. Install dependencies:
@@ -56,6 +56,36 @@ yarn build
 ```
 
 The optimized version will be generated in the `dist/` folder.
+
+## 🌐 Deployment
+
+### GitHub Pages
+
+This project is configured for automatic deployment to GitHub Pages:
+
+1. **Enable GitHub Pages** in your repository:
+   - Go to Settings → Pages
+   - Source: "GitHub Actions"
+
+2. **Push to main branch**:
+
+   ```bash
+   git push origin main
+   ```
+
+3. **Automatic deployment**:
+   - GitHub Actions will automatically build and deploy your app
+   - Check the "Actions" tab to monitor deployment progress
+   - Your app will be available at: `https://<username>.github.io/<repository-name>/`
+
+### Manual Deployment
+
+To deploy manually:
+
+```bash
+yarn build
+# Upload contents of dist/ folder to your hosting provider
+```
 
 ## 📁 Project Structure
 
@@ -126,7 +156,7 @@ The project follows a modular architecture with clear separation of concerns:
 - **`dist/` folder** - built version, ignored by git (`.gitignore`)
 - **`node_modules/` folder** - dependencies, ignored by git
 
-## 🐛 Known Issues / TODO
+## 🐛 Future improvements
 
 - [ ] Add timer for players
 - [ ] Move history
