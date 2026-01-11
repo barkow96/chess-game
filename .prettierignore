@@ -1,0 +1,6 @@
+.parcel-cache
+dist
+node_modules
+src/css
+package-lock.json
+yarn.lock
