@@ -5,21 +5,25 @@ import Knight from "../pieces/Knight";
 import Pawn from "../pieces/Pawn";
 import Queen from "../pieces/Queen";
 import Rook from "../pieces/Rook";
+import { Color, Piece, PieceName, Pole } from "../pieces/pieces.types";
+import Player from "../player/Player";
 
 //CLASS THAT REPRESENTS THE CHESSBOARD
 export default class ChessBoard {
-  constructor(tales) {
+  poles: Pole[][];
+
+  constructor(tales: NodeListOf<Element>) {
     this.poles = new Array(8);
     this.prepare(tales);
   }
 
   //PLACING PIECES ON THE CHESSBOARD
-  prepare(tales) {
+  prepare(tales: NodeListOf<Element>): void {
     for (let i = 0; i < this.poles.length; i++)
       this.poles[i] = new Array(this.poles.length);
 
-    let color = "0";
-    let figure = "0";
+    let color: Color = "0";
+    let figure: Piece | "0" = "0";
     let isFigure = false;
     for (let j = 0; j < 8; j++) {
       for (let i = 0; i < 8; i++) {
@@ -28,7 +32,7 @@ export default class ChessBoard {
           y: j,
           figure: "0",
           color: "0",
-          tale: tales[8 * j + i],
+          tale: tales[8 * j + i] as HTMLDivElement,
           activated: false,
         };
 
@@ -83,23 +87,23 @@ export default class ChessBoard {
         this.poles[j][i].color = color;
         this.poles[j][i].tale.className = "";
         this.poles[j][i].tale.classList.add("tale");
-        if (isFigure) this.addClass(figure.name, color, i, j);
+        if (isFigure && figure !== "0") this.addClass(figure.name, color, i, j);
       }
     }
   }
 
   //ADDING AN AVATAR OF A FIGURE
-  addClass(name, color, x, y) {
+  addClass(name: PieceName, color: Color, x: number, y: number): void {
     this.poles[y][x].tale.classList.add("tale-" + name + "-" + color);
   }
 
   //REMOVING AN AVATAR OF A FIGURE
-  removeClass(name, color, x, y) {
+  removeClass(name: PieceName, color: Color, x: number, y: number): void {
     this.poles[y][x].tale.classList.remove("tale-" + name + "-" + color);
   }
 
   //ACTIVATING A SQUARE (POSSIBLE TO CLICK)
-  activate(x, y) {
+  activate(x: number, y: number): void {
     if (!this.poles[y][x].activated) {
       this.poles[y][x].activated = true;
       this.poles[y][x].tale.classList.add("pointer");
@@ -110,14 +114,14 @@ export default class ChessBoard {
   }
 
   //HIGHLIGHTNING A SQUARE
-  highlight(x, y) {
+  highlight(x: number, y: number): void {
     if ((x + y) % 2 == 0)
       this.poles[y][x].tale.style.backgroundColor = "#964b00";
     else this.poles[y][x].tale.style.backgroundColor = "#808080";
   }
 
   //ACTIVATING PLAYER'S PIECES
-  activatePlayer(player) {
+  activatePlayer(player: Player): void {
     this.poles.forEach((row) => {
       row.forEach((pole) => {
         if (pole.color == player.color) this.activate(pole.x, pole.y);
@@ -126,7 +130,7 @@ export default class ChessBoard {
   }
 
   //DEACTIVATING A SQUARE (NOT POSSIBLE TO CLICK)
-  deactivate(x, y) {
+  deactivate(x: number, y: number): void {
     if (this.poles[y][x].activated) {
       this.poles[y][x].tale.classList.remove("pointer");
       this.poles[y][x].tale.removeEventListener("click", performAction, true);
@@ -138,7 +142,7 @@ export default class ChessBoard {
   }
 
   //DEACTIVATING PLAYER'S PIECES
-  deactivatePlayer(player) {
+  deactivatePlayer(player: Player): void {
     this.poles.forEach((row) => {
       row.forEach((pole) => {
         if (pole.color == player.color) this.deactivate(pole.x, pole.y);
@@ -147,7 +151,7 @@ export default class ChessBoard {
   }
 
   //DEACTIVATING ALL SQUARES
-  deactivateAll() {
+  deactivateAll(): void {
     this.poles.forEach((row) => {
       row.forEach((pole) => {
         this.deactivate(pole.x, pole.y);

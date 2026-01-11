@@ -1,4 +1,4 @@
-import ChessBoard from "./chess-board/ChessBoard.js";
+import ChessBoard from "./chess-board/ChessBoard";
 import Queen from "./pieces/Queen";
 import Player from "./player/Player";
 

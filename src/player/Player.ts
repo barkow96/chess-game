@@ -1,6 +1,16 @@
+import { Color } from "../pieces/pieces.types";
+
 //CLASS THAT REPRESENTS A PLAYER
 export default class Player {
-  constructor(color, myTurn) {
+  color: Color;
+  firstClick: boolean;
+  firstClickX: number;
+  firstClickY: number;
+  pieces: number;
+  check: boolean;
+  checkMate: boolean;
+
+  constructor(color: Color) {
     this.color = color;
     this.firstClick = true;
     this.firstClickX = 0;

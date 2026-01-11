@@ -39,8 +39,8 @@ export type ChessBoardType = {
   highlight(x: number, y: number): void;
   addClass(name: PieceName, color: Color, x: number, y: number): void;
   removeClass(name: PieceName, color: Color, x: number, y: number): void;
-  activatePlayer(player: any): void;
-  deactivatePlayer(player: any): void;
+  activatePlayer(player: PlayerType): void;
+  deactivatePlayer(player: PlayerType): void;
   deactivateAll(): void;
 };
 
@@ -53,4 +53,14 @@ export type CastlingResult = {
 export type AttackedSpots = {
   x: number[];
   y: number[];
+};
+
+export type PlayerType = {
+  color: Color;
+  firstClick: boolean;
+  firstClickX: number;
+  firstClickY: number;
+  pieces: number;
+  check: boolean;
+  checkMate: boolean;
 };
