@@ -65,18 +65,22 @@ This project is configured for automatic deployment to GitHub Pages:
 
 1. **Enable GitHub Pages** in your repository:
    - Go to Settings → Pages
-   - Source: "GitHub Actions"
+   - Source: **"GitHub Actions"** (NOT "Deploy from a branch")
 
 2. **Push to main branch**:
 
-   ```bash
-   git push origin main
-   ```
+```bash
+git add .
+git commit -m "Configure GitHub Pages deployment"
+git push origin main
+```
 
 3. **Automatic deployment**:
    - GitHub Actions will automatically build and deploy your app
    - Check the "Actions" tab to monitor deployment progress
    - Your app will be available at: `https://<username>.github.io/<repository-name>/`
+
+**Important:** Make sure to select "GitHub Actions" as the source in Pages settings, not "Deploy from a branch".
 
 ### Manual Deployment
 

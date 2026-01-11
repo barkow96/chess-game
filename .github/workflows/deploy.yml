@@ -25,14 +25,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'yarn'
+          node-version: "20"
+          cache: "yarn"
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
       - name: Build project
         run: yarn build
+
+      - name: Add .nojekyll file
+        run: cp .nojekyll dist/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
