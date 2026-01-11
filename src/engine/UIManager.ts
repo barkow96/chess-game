@@ -1,4 +1,4 @@
-import { Color } from "../pieces/pieces.types";
+import { Color } from "../pieces";
 import { GameState } from "./GameState";
 
 type ChessQuotes = {

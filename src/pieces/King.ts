@@ -1,8 +1,8 @@
-import Knight from "./Knight";
+import { Knight } from "./Knight";
 import type {
-  ChessBoardType,
-  CastlingResult,
   AttackedSpots,
+  CastlingResult,
+  ChessBoardType,
   Color,
   Piece,
 } from "./pieces.types";
@@ -18,7 +18,7 @@ type Player = {
  * Represents a king piece in chess
  * Can move one square in any direction and perform castling
  */
-export default class King extends Knight {
+export class King extends Knight {
   /**
    * Creates a new king piece
    * @param x - The x coordinate (0-7)

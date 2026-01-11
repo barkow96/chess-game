@@ -1,5 +1,5 @@
-import { MovesResult, Piece } from "../pieces/pieces.types";
-import Player from "../player/Player";
+import { MovesResult, Piece } from "../pieces";
+import { Player } from "../player";
 import { AttackDetector } from "./AttackDetector";
 import { GameState } from "./GameState";
 

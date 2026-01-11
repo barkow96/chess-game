@@ -1,17 +1,22 @@
 import performAction from "../main";
-import Bishop from "../pieces/Bishop";
-import King from "../pieces/King";
-import Knight from "../pieces/Knight";
-import Pawn from "../pieces/Pawn";
-import Queen from "../pieces/Queen";
-import Rook from "../pieces/Rook";
-import { Color, Piece, PieceName, Pole } from "../pieces/pieces.types";
-import Player from "../player/Player";
+import {
+  Bishop,
+  Color,
+  King,
+  Knight,
+  Pawn,
+  Piece,
+  PieceName,
+  Pole,
+  Queen,
+  Rook,
+} from "../pieces";
+import { Player } from "../player";
 
 /**
  * Represents the chess board with all squares and pieces
  */
-export default class ChessBoard {
+export class ChessBoard {
   poles: Pole[][];
 
   /**

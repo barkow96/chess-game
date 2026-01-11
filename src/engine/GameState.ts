@@ -1,6 +1,6 @@
-import ChessBoard from "../chess-board/ChessBoard";
-import { Color } from "../pieces/pieces.types";
-import Player from "../player/Player";
+import { ChessBoard } from "../chess-board";
+import { Color } from "../pieces";
+import { Player } from "../player";
 
 export type EnPassantState = {
   captureCoords: [number | null, number | null];

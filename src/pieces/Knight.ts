@@ -1,11 +1,11 @@
-import Pawn from "./Pawn";
+import { Pawn } from "./Pawn";
 import type { ChessBoardType, MovesResult, Color } from "./pieces.types";
 
 /**
  * Represents a knight piece in chess
  * Moves in an L-shape pattern
  */
-export default class Knight extends Pawn {
+export class Knight extends Pawn {
   directions: string[];
   dx: number[];
   dy: number[];

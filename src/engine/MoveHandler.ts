@@ -1,5 +1,4 @@
-import { Color, MovesResult, Piece } from "../pieces/pieces.types";
-import Queen from "../pieces/Queen";
+import { Color, MovesResult, Piece, Queen } from "../pieces";
 import { AttackDetector } from "./AttackDetector";
 import { CheckDetector } from "./CheckDetector";
 import { GameState } from "./GameState";

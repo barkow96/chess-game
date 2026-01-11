@@ -1,5 +1,5 @@
-import { AttackedSpots, Color, Piece } from "../pieces/pieces.types";
-import Player from "../player/Player";
+import { AttackedSpots, Color, Piece } from "../pieces";
+import { Player } from "../player";
 import { GameState } from "./GameState";
 
 /**

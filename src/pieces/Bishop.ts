@@ -1,11 +1,11 @@
-import Pawn from "./Pawn";
+import { Pawn } from "./Pawn";
 import type { ChessBoardType, MovesResult, Color } from "./pieces.types";
 
 /**
  * Represents a bishop piece in chess
  * Moves diagonally across the board
  */
-export default class Bishop extends Pawn {
+export class Bishop extends Pawn {
   directions: string[];
   dx: number[];
   dy: number[];

@@ -8,7 +8,7 @@ import type {
 /**
  * Represents a pawn piece in chess
  */
-export default class Pawn {
+export class Pawn {
   x: number;
   y: number;
   cb: ChessBoardType;

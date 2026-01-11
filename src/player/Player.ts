@@ -3,7 +3,7 @@ import { Color } from "../pieces/pieces.types";
 /**
  * Represents a player in the chess game
  */
-export default class Player {
+export class Player {
   color: Color;
   firstClick: boolean;
   firstClickX: number;

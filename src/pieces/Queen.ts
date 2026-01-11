@@ -1,11 +1,11 @@
-import Bishop from "./Bishop";
+import { Bishop } from "./Bishop";
 import type { ChessBoardType } from "./pieces.types";
 
 /**
  * Represents a queen piece in chess
  * Combines the movement of rook and bishop
  */
-export default class Queen extends Bishop {
+export class Queen extends Bishop {
   /**
    * Creates a new queen piece
    * @param x - The x coordinate (0-7)
