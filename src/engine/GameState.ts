@@ -1,0 +1,74 @@
+import ChessBoard from "../chess-board/ChessBoard";
+import { Color } from "../pieces/pieces.types";
+import Player from "../player/Player";
+
+export type EnPassantState = {
+  captureCoords: [number | null, number | null];
+  figureCoords: [number | null, number | null];
+  possible: boolean;
+  executed: boolean;
+};
+
+/**
+ * Manages the game state including board, players, and special moves
+ */
+export class GameState {
+  cb: ChessBoard;
+  whitePlayer: Player;
+  blackPlayer: Player;
+  currPlayer: Player;
+  oppPlayer: Player;
+  players: Player[];
+  playerBuffer: Player | null;
+  enPassant: EnPassantState;
+
+  constructor(talesDivs: NodeListOf<HTMLDivElement>) {
+    const WHITE: Color = "W";
+    const BLACK: Color = "B";
+
+    this.cb = new ChessBoard(talesDivs);
+    this.whitePlayer = new Player(WHITE);
+    this.blackPlayer = new Player(BLACK);
+    this.players = [this.whitePlayer, this.blackPlayer];
+    this.currPlayer = this.whitePlayer;
+    this.oppPlayer = this.blackPlayer;
+    this.playerBuffer = null;
+    this.enPassant = {
+      captureCoords: [null, null],
+      figureCoords: [null, null],
+      possible: false,
+      executed: false,
+    };
+  }
+
+  /**
+   * Resets the game state for a new game
+   */
+  reset(talesDivs: NodeListOf<HTMLDivElement>): void {
+    const WHITE: Color = "W";
+    const BLACK: Color = "B";
+
+    this.cb = new ChessBoard(talesDivs);
+    this.whitePlayer = new Player(WHITE);
+    this.blackPlayer = new Player(BLACK);
+    this.players = [this.whitePlayer, this.blackPlayer];
+    this.currPlayer = this.whitePlayer;
+    this.oppPlayer = this.blackPlayer;
+    this.playerBuffer = null;
+    this.enPassant = {
+      captureCoords: [null, null],
+      figureCoords: [null, null],
+      possible: false,
+      executed: false,
+    };
+  }
+
+  /**
+   * Switches the current player
+   */
+  switchPlayers(): void {
+    this.playerBuffer = this.currPlayer;
+    this.currPlayer = this.oppPlayer;
+    this.oppPlayer = this.playerBuffer;
+  }
+}
