@@ -1,21 +1,33 @@
 import ChessBoard from "./chess-board/ChessBoard";
+import {
+  AttackedSpots,
+  Color,
+  MovesResult,
+  Piece,
+} from "./pieces/pieces.types";
 import Queen from "./pieces/Queen";
 import Player from "./player/Player";
 
 //ELEMENTS SELECTORS
-const containerDiv = document.querySelector(".container");
-const headerDiv = document.querySelector(".header");
-const talesDivs = document.querySelectorAll(".tale");
-const resultDiv = document.querySelector(".result");
-const infoDiv = document.querySelector(".info");
+const containerDiv = document.querySelector(".container") as HTMLDivElement;
+const headerDiv = document.querySelector(".header") as HTMLDivElement;
+const talesDivs = document.querySelectorAll(
+  ".tale",
+) as NodeListOf<HTMLDivElement>;
+const resultDiv = document.querySelector(".result") as HTMLDivElement;
+const infoDiv = document.querySelector(".info") as HTMLDivElement;
 
 //OBJECT CONTAINING CHESS QUOTES
-const chessQuotes = {
+const chessQuotes: {
+  quotes: string[];
+  counter: number;
+  change: boolean;
+} = {
   quotes: [
-    `"Chess is a war over the board. The object is to crush the opponent’s mind." ~ Bobby Fischer`,
+    `"Chess is a war over the board. The object is to crush the opponent's mind." ~ Bobby Fischer`,
     `"When you see a good move, look for a better one." ~ Emanuel Lasker`,
     `"Even a poor plan is better than no plan at all." ~ Mikhail Chigorin`,
-    `"If your opponent offers you a draw, try to work out why he thinks he’s worse off." ~ Nigel Short`,
+    `"If your opponent offers you a draw, try to work out why he thinks he's worse off." ~ Nigel Short`,
     `"There are two types of sacrifices: correct ones and mine." ~ Mikhail Tal`,
     `"I used to attack because it was the only thing I knew. Now I attack because I know it works best." ~ Garry Kasparov`,
   ],
@@ -24,19 +36,24 @@ const chessQuotes = {
 };
 
 //COLOR CONSTANTS
-const WHITE = "W";
-const BLACK = "B";
+const WHITE: Color = "W";
+const BLACK: Color = "B";
 
 //GAME STATE VARIABLES
-let cb;
-let whitePlayer, blackPlayer;
-let currPlayer, oppPlayer;
-let players = new Array(2);
-let playerBuffer;
-let enPassant;
+let cb: ChessBoard;
+let whitePlayer: Player, blackPlayer: Player;
+let currPlayer: Player, oppPlayer: Player;
+let players: Player[] = new Array(2);
+let playerBuffer: Player;
+let enPassant: {
+  captureCoords: [number | null, number | null];
+  figureCoords: [number | null, number | null];
+  possible: boolean;
+  executed: boolean;
+};
 
 //FUNCTION FOR RE-INITIALIZATION THE GAME STATE
-const init = () => {
+const init = (): void => {
   containerDiv.removeEventListener("click", init, true);
   containerDiv.classList.remove("pointer");
   infoDiv.innerHTML = "White to move, have a nice game!";
@@ -64,9 +81,10 @@ const init = () => {
 headerDiv.addEventListener("click", init);
 
 //MAIN FUNCTION - PERFORMING OPERATIONS BY CLICKING THE FIGURES
-export default function performAction(event) {
-  const div = event.composedPath()[0]; // Wywołanie metody z nawiasami ()
-  let x, y;
+export default function performAction(event: Event): void {
+  const div = (event as any).composedPath()[0] as HTMLDivElement;
+  let x: number = 0,
+    y: number = 0;
 
   //READING THE COORDINATES OF THE CLICK-EVENT
   cb.poles.forEach((row) => {
@@ -85,7 +103,7 @@ export default function performAction(event) {
     cb.activate(x, y);
     cb.highlight(x, y);
 
-    const figure = cb.poles[y][x].figure;
+    const figure = cb.poles[y][x].figure as Piece;
     const movesPossible = figure.movesPossible();
     const capturesPossible = figure.capturesPossible();
     const totalActionsPossible = calculateTotalActions(
@@ -114,7 +132,7 @@ export default function performAction(event) {
       cb.highlight(x, y);
 
       //ACTIVATING THE FIELDS FOR CASTLING (IF POSSIBLE)
-      const castlings = figure.castlingPossible(currPlayer);
+      const castlings = (figure as any).castlingPossible(currPlayer);
       for (let i = 0; i < 2; i++) {
         if (castlings.possible[i]) {
           cb.activate(x + castlings.dx[i], y);
@@ -125,10 +143,10 @@ export default function performAction(event) {
 
     //SPECIAL BEHAVIOR IF THE CURRENT FIGURE IS NOT A KING
     //ACTIVATING ONLY THESE ACTIONS THAT WOULD NOT CAUSE CHECK ON PLAYER'S KING
-    else if (figure.name != "K") {
-      let tempX, tempY;
-      let tempFigure;
-      let tempColor;
+    else {
+      let tempX: number, tempY: number;
+      let tempFigure: Piece | "0";
+      let tempColor: Color;
 
       for (let i = 0; i < actionsNumber; i++) {
         tempX = totalActionsPossible.x[i];
@@ -137,7 +155,7 @@ export default function performAction(event) {
         tempColor = cb.poles[tempY][tempX].color;
 
         cb.poles[tempY][tempX].figure = figure;
-        cb.poles[tempY][tempX].figure.setPosition(tempX, tempY);
+        (cb.poles[tempY][tempX].figure as Piece).setPosition(tempX, tempY);
         cb.poles[tempY][tempX].color = currPlayer.color;
 
         cb.poles[y][x].figure = "0";
@@ -147,11 +165,11 @@ export default function performAction(event) {
 
         cb.poles[tempY][tempX].figure = tempFigure;
         if (tempFigure != "0")
-          cb.poles[tempY][tempX].figure.setPosition(tempX, tempY);
+          (cb.poles[tempY][tempX].figure as Piece).setPosition(tempX, tempY);
         cb.poles[tempY][tempX].color = tempColor;
 
         cb.poles[y][x].figure = figure;
-        cb.poles[y][x].figure.setPosition(x, y);
+        (cb.poles[y][x].figure as Piece).setPosition(x, y);
         cb.poles[y][x].color = currPlayer.color;
       }
     }
@@ -160,6 +178,8 @@ export default function performAction(event) {
     if (
       enPassant.possible &&
       figure.name == "P" &&
+      enPassant.captureCoords[0] !== null &&
+      enPassant.captureCoords[1] !== null &&
       Math.abs(x - enPassant.captureCoords[0]) == 1 &&
       Math.abs(y - enPassant.captureCoords[1]) == 1
     ) {
@@ -184,9 +204,9 @@ export default function performAction(event) {
 
     //IF THE SECOND CLICK IS OTHER THAN THE FIRST CLICK THEN EXECUTE THE CODE BELOW
     else {
-      const figure = cb.poles[currPlayer.firstClickY][
-        currPlayer.firstClickX
-      ].figure.setPosition(x, y);
+      const figure = (
+        cb.poles[currPlayer.firstClickY][currPlayer.firstClickX].figure as Piece
+      ).setPosition(x, y);
       const color =
         cb.poles[currPlayer.firstClickY][currPlayer.firstClickX].color;
 
@@ -195,14 +215,16 @@ export default function performAction(event) {
         enPassant.possible = false;
 
         if (
+          enPassant.captureCoords[0] !== null &&
+          enPassant.captureCoords[1] !== null &&
           x == enPassant.captureCoords[0] &&
           y == enPassant.captureCoords[1]
         ) {
-          const figX = enPassant.figureCoords[0];
-          const figY = enPassant.figureCoords[1];
+          const figX = enPassant.figureCoords[0] as number;
+          const figY = enPassant.figureCoords[1] as number;
 
           cb.removeClass(
-            cb.poles[figY][figX].figure.name,
+            (cb.poles[figY][figX].figure as Piece).name,
             cb.poles[figY][figX].color,
             figX,
             figY,
@@ -233,13 +255,13 @@ export default function performAction(event) {
       if (figure.name == "K" && Math.abs(currPlayer.firstClickX - x) > 1) {
         const rookX = currPlayer.firstClickX > x ? 0 : 7;
         const rookY = y;
-        const rook = cb.poles[rookY][rookX].figure;
+        const rook = cb.poles[rookY][rookX].figure as Piece;
 
         const rookNewX = x == 6 ? 5 : 3;
         const rookNewY = rookY;
 
         cb.removeClass(
-          cb.poles[rookY][rookX].figure.name,
+          (cb.poles[rookY][rookX].figure as Piece).name,
           cb.poles[rookY][rookX].color,
           rookX,
           rookY,
@@ -253,7 +275,7 @@ export default function performAction(event) {
         );
         cb.poles[rookNewY][rookNewX].color = currPlayer.color;
         cb.addClass(
-          cb.poles[rookNewY][rookNewX].figure.name,
+          (cb.poles[rookNewY][rookNewX].figure as Piece).name,
           cb.poles[rookNewY][rookNewX].color,
           rookNewX,
           rookNewY,
@@ -262,7 +284,12 @@ export default function performAction(event) {
 
       //REMOVING PIECE'S AVATAR AND DECREMATING PIECE'S COUNTER
       if (cb.poles[y][x].figure != "0") {
-        cb.removeClass(cb.poles[y][x].figure.name, cb.poles[y][x].color, x, y);
+        cb.removeClass(
+          (cb.poles[y][x].figure as Piece).name,
+          cb.poles[y][x].color,
+          x,
+          y,
+        );
         oppPlayer.pieces = oppPlayer.pieces - 1;
       }
 
@@ -273,7 +300,7 @@ export default function performAction(event) {
 
       //TRANSFERRING PIECE'S AVATAR FROM SOURCE TO DESTINATION
       cb.poles[y][x].color = color;
-      cb.addClass(cb.poles[y][x].figure.name, color, x, y);
+      cb.addClass((cb.poles[y][x].figure as Piece).name, color, x, y);
       cb.poles[currPlayer.firstClickY][currPlayer.firstClickX].figure = "0";
       cb.poles[currPlayer.firstClickY][currPlayer.firstClickX].color = "0";
       cb.removeClass(
@@ -317,17 +344,17 @@ export default function performAction(event) {
 }
 
 //FUNCTION FOR FINDING WHICH FIELDS OF PLAYER ARE UNDER ATTACK
-const findAttackedSpots = (player) => {
+const findAttackedSpots = (player: Player): AttackedSpots => {
   const color = player.color;
-  const oppColor = color == WHITE ? BLACK : WHITE;
-  let attackedSpots = {
+  const oppColor: Color = color == WHITE ? BLACK : WHITE;
+  let attackedSpots: AttackedSpots = {
     x: [],
     y: [],
   };
 
   cb.poles.forEach((row) => {
     row.forEach((pole) => {
-      if (pole.color == oppColor) {
+      if (pole.color == oppColor && pole.figure !== "0") {
         attackedSpots.x = attackedSpots.x.concat(
           pole.figure.capturesPossible().x,
         );
@@ -342,8 +369,11 @@ const findAttackedSpots = (player) => {
 };
 
 //FUNCTION FOR CALCULATING HOW MANY ACTIONS ARE POSSIBLE TO PERFORM
-const calculateTotalActions = (moves, captures) => {
-  const totalActionsPossible = { x: [], y: [], possible: [] };
+const calculateTotalActions = (
+  moves: MovesResult,
+  captures: MovesResult,
+): MovesResult => {
+  const totalActionsPossible: MovesResult = { x: [], y: [], possible: [] };
   totalActionsPossible.x = moves.x.concat(captures.x);
   totalActionsPossible.y = moves.y.concat(captures.y);
   totalActionsPossible.possible = moves.possible.concat(captures.possible);
@@ -364,8 +394,8 @@ const calculateTotalActions = (moves, captures) => {
 };
 
 //FUNCTION FOR FINDING PLAYER'S KING ON THE CHESSBOARD
-const findKing = (player) => {
-  let king;
+const findKing = (player: Player): Piece => {
+  let king: Piece | undefined;
 
   cb.poles.forEach((row) => {
     row.forEach((pole) => {
@@ -378,11 +408,11 @@ const findKing = (player) => {
     });
   });
 
-  return king;
+  return king as Piece;
 };
 
 //FUNCTION FOR CALCULATING HOW MANY ATTACKERS WANTS TO CAPTURE PLAYER'S KING
-const calculateAttackersNumber = (player) => {
+const calculateAttackersNumber = (player: Player): number => {
   const king = findKing(player);
 
   const attackedSpots = findAttackedSpots(player);
@@ -398,12 +428,14 @@ const calculateAttackersNumber = (player) => {
 };
 
 //FUNCTION FOR CHECKING IF THERE IS CHECK ON A PLAYER
-const isChecked = (player) => {
+const isChecked = (player: Player): boolean => {
   const attackedSpots = findAttackedSpots(player);
   const spotsNumber = attackedSpots.x.length;
   for (let i = 0; i < spotsNumber; i++) {
     if (
-      cb.poles[attackedSpots.y[i]][attackedSpots.x[i]].figure.name == "K" &&
+      cb.poles[attackedSpots.y[i]][attackedSpots.x[i]].figure !== "0" &&
+      (cb.poles[attackedSpots.y[i]][attackedSpots.x[i]].figure as Piece).name ==
+        "K" &&
       cb.poles[attackedSpots.y[i]][attackedSpots.x[i]].color == player.color
     )
       return true;
@@ -413,7 +445,7 @@ const isChecked = (player) => {
 };
 
 //FUNCTION FOR CHECKING IF THERE IS POSSIBILITY OF CAPTURE CHECK MATE PREVENTION
-const captureCheckMatePreventionPossible = (x, y) => {
+const captureCheckMatePreventionPossible = (x: number, y: number): boolean => {
   const attackedSpots = findAttackedSpots(currPlayer);
   const spotsNumber = attackedSpots.x.length;
 
@@ -424,14 +456,14 @@ const captureCheckMatePreventionPossible = (x, y) => {
 };
 
 //FUNCTION FOR CHECKING IF THERE IS POSSIBILITY OF BLOCK CHECK MATE PREVENTION
-const blockCheckMatePreventionPossible = (x, y) => {
-  const attacker = cb.poles[y][x].figure;
+const blockCheckMatePreventionPossible = (x: number, y: number): boolean => {
+  const attacker = cb.poles[y][x].figure as Piece;
   const king = findKing(oppPlayer);
 
   if (attacker.name == "B" || attacker.name == "R" || attacker.name == "Q") {
     if (
       Math.abs(attacker.x - king.x) <= 1 &&
-      Math.abs(attacker.y - king.y <= 1)
+      Math.abs(attacker.y - king.y) <= 1
     )
       return false;
     else {
@@ -444,9 +476,9 @@ const blockCheckMatePreventionPossible = (x, y) => {
           ? (attacker.y - king.y) / Math.abs(attacker.y - king.y)
           : attacker.y - king.y;
       let multip = 1;
-      let X, Y;
-      let movesPossible;
-      let movesNumber;
+      let X: number, Y: number;
+      let movesPossible: MovesResult;
+      let movesNumber: number;
       let blockPossible = false;
 
       while (
@@ -483,7 +515,7 @@ const blockCheckMatePreventionPossible = (x, y) => {
 };
 
 //FUNCTION FOR CHECKING IF THERE IS POSSIBILITY OF KING'S MOVE CHECK MATE PREVENTION
-const moveCheckMatePreventionPossible = () => {
+const moveCheckMatePreventionPossible = (): boolean => {
   const king = findKing(oppPlayer);
 
   const attackedSpots = findAttackedSpots(oppPlayer);
@@ -520,7 +552,7 @@ const moveCheckMatePreventionPossible = () => {
 };
 
 //FUNCTION FOR UPDATING GAME INFO PANEL
-const updateResult = () => {
+const updateResult = (): void => {
   resultDiv.innerHTML =
     "White pieces: " +
     whitePlayer.pieces +
