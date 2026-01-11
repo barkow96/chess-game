@@ -1,8 +1,17 @@
 import Bishop from "./Bishop";
 import type { ChessBoardType } from "./pieces.types";
 
-// CLASS THAT REPRESENTS A QUEEN
+/**
+ * Represents a queen piece in chess
+ * Combines the movement of rook and bishop
+ */
 export default class Queen extends Bishop {
+  /**
+   * Creates a new queen piece
+   * @param x - The x coordinate (0-7)
+   * @param y - The y coordinate (0-7)
+   * @param chessBoard - Reference to the chess board
+   */
   constructor(x: number, y: number, chessBoard: ChessBoardType) {
     super(x, y, chessBoard);
     this.name = "Q";

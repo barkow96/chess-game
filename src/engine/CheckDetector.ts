@@ -10,6 +10,11 @@ export class CheckDetector {
   private gameState: GameState;
   private attackDetector: AttackDetector;
 
+  /**
+   * Creates a new check detector
+   * @param gameState - The current game state
+   * @param attackDetector - The attack detector instance
+   */
   constructor(gameState: GameState, attackDetector: AttackDetector) {
     this.gameState = gameState;
     this.attackDetector = attackDetector;
@@ -17,6 +22,8 @@ export class CheckDetector {
 
   /**
    * Checks if a player is in check
+   * @param player - The player to check
+   * @returns True if the player is in check, false otherwise
    */
   isChecked(player: Player): boolean {
     const attackedSpots = this.attackDetector.findAttackedSpots(player);
@@ -40,6 +47,9 @@ export class CheckDetector {
 
   /**
    * Checks if capturing the attacker can prevent checkmate
+   * @param x - The x coordinate of the attacking piece
+   * @param y - The y coordinate of the attacking piece
+   * @returns True if capture is possible, false otherwise
    */
   captureCheckMatePreventionPossible(x: number, y: number): boolean {
     const attackedSpots = this.attackDetector.findAttackedSpots(
@@ -55,6 +65,9 @@ export class CheckDetector {
 
   /**
    * Checks if blocking the attack can prevent checkmate
+   * @param x - The x coordinate of the attacking piece
+   * @param y - The y coordinate of the attacking piece
+   * @returns True if blocking is possible, false otherwise
    */
   blockCheckMatePreventionPossible(x: number, y: number): boolean {
     const attacker = this.gameState.cb.poles[y][x].figure as Piece;
@@ -116,6 +129,7 @@ export class CheckDetector {
 
   /**
    * Checks if the king can move to prevent checkmate
+   * @returns True if the king has safe moves, false otherwise
    */
   moveCheckMatePreventionPossible(): boolean {
     const king = this.attackDetector.findKing(this.gameState.oppPlayer);
@@ -156,6 +170,9 @@ export class CheckDetector {
 
   /**
    * Calculates total possible actions (moves + captures)
+   * @param moves - The possible moves
+   * @param captures - The possible captures
+   * @returns Combined result of all possible actions
    */
   private calculateTotalActions(
     moves: MovesResult,

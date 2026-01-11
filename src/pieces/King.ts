@@ -7,13 +7,24 @@ import type {
   Piece,
 } from "./pieces.types";
 
-// Player type (simplified for King's needs)
+/**
+ * Player type (simplified for King's needs)
+ */
 type Player = {
   color: Color;
 };
 
-// CLASS THAT REPRESENTS A KING
+/**
+ * Represents a king piece in chess
+ * Can move one square in any direction and perform castling
+ */
 export default class King extends Knight {
+  /**
+   * Creates a new king piece
+   * @param x - The x coordinate (0-7)
+   * @param y - The y coordinate (0-7)
+   * @param chessBoard - Reference to the chess board
+   */
   constructor(x: number, y: number, chessBoard: ChessBoardType) {
     super(x, y, chessBoard);
     this.name = "K";
@@ -32,7 +43,11 @@ export default class King extends Knight {
     this.firstMove = true;
   }
 
-  // CALCULATING CASTLINGS
+  /**
+   * Calculates if castling is possible
+   * @param player - The player attempting to castle
+   * @returns Object containing rooks, dx offsets, and possibility flags
+   */
   castlingPossible(player: Player): CastlingResult {
     const castlings: CastlingResult = {
       rooks: ["0", "0"],

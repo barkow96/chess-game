@@ -22,6 +22,10 @@ export class GameState {
   playerBuffer: Player | null;
   enPassant: EnPassantState;
 
+  /**
+   * Creates a new game state with initialized board and players
+   * @param talesDivs - Collection of all chess board square elements
+   */
   constructor(talesDivs: NodeListOf<HTMLDivElement>) {
     const WHITE: Color = "W";
     const BLACK: Color = "B";
@@ -43,6 +47,7 @@ export class GameState {
 
   /**
    * Resets the game state for a new game
+   * @param talesDivs - Collection of all chess board square elements
    */
   reset(talesDivs: NodeListOf<HTMLDivElement>): void {
     const WHITE: Color = "W";

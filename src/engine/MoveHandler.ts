@@ -12,6 +12,12 @@ export class MoveHandler {
   private attackDetector: AttackDetector;
   private checkDetector: CheckDetector;
 
+  /**
+   * Creates a new move handler
+   * @param gameState - The current game state
+   * @param attackDetector - The attack detector instance
+   * @param checkDetector - The check detector instance
+   */
   constructor(
     gameState: GameState,
     attackDetector: AttackDetector,
@@ -24,6 +30,9 @@ export class MoveHandler {
 
   /**
    * Calculates total possible actions (moves + captures)
+   * @param moves - The possible moves
+   * @param captures - The possible captures
+   * @returns Combined result of all possible actions
    */
   calculateTotalActions(
     moves: MovesResult,
@@ -51,6 +60,8 @@ export class MoveHandler {
 
   /**
    * Handles the first click - activates possible moves
+   * @param x - The x coordinate of the clicked square
+   * @param y - The y coordinate of the clicked square
    */
   handleFirstClick(x: number, y: number): void {
     const cb = this.gameState.cb;
@@ -155,6 +166,8 @@ export class MoveHandler {
 
   /**
    * Handles the second click - executes the move
+   * @param x - The x coordinate of the destination square
+   * @param y - The y coordinate of the destination square
    */
   handleSecondClick(x: number, y: number): void {
     const cb = this.gameState.cb;
@@ -241,6 +254,8 @@ export class MoveHandler {
 
   /**
    * Handles en passant capture
+   * @param x - The x coordinate of the destination square
+   * @param y - The y coordinate of the destination square
    */
   private handleEnPassant(x: number, y: number): void {
     const cb = this.gameState.cb;
@@ -274,6 +289,9 @@ export class MoveHandler {
 
   /**
    * Handles castling move
+   * @param figure - The king piece performing castling
+   * @param x - The x coordinate of the destination square
+   * @param y - The y coordinate of the destination square
    */
   private handleCastling(figure: Piece, x: number, y: number): void {
     const cb = this.gameState.cb;
@@ -312,6 +330,8 @@ export class MoveHandler {
 
   /**
    * Handles check and checkmate detection
+   * @param x - The x coordinate of the last move
+   * @param y - The y coordinate of the last move
    */
   private handleCheckAndCheckmate(x: number, y: number): void {
     const currPlayer = this.gameState.currPlayer;

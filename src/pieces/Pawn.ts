@@ -5,7 +5,9 @@ import type {
   Color,
 } from "./pieces.types";
 
-// CLASS THAT REPRESENTS A PAWN
+/**
+ * Represents a pawn piece in chess
+ */
 export default class Pawn {
   x: number;
   y: number;
@@ -13,6 +15,12 @@ export default class Pawn {
   name: PieceName;
   firstMove: boolean;
 
+  /**
+   * Creates a new pawn piece
+   * @param x - The x coordinate (0-7)
+   * @param y - The y coordinate (0-7)
+   * @param chessBoard - Reference to the chess board
+   */
   constructor(x: number, y: number, chessBoard: ChessBoardType) {
     this.x = x;
     this.y = y;
@@ -21,14 +29,22 @@ export default class Pawn {
     this.firstMove = true;
   }
 
-  // SETTINGS FIGURE'S POSITION
+  /**
+   * Sets the piece's position on the board
+   * @param x - The new x coordinate
+   * @param y - The new y coordinate
+   * @returns This piece instance for chaining
+   */
   setPosition(x: number, y: number): this {
     this.x = x;
     this.y = y;
     return this;
   }
 
-  // CALCULATING MOVES
+  /**
+   * Calculates all possible moves for this pawn
+   * @returns Object containing arrays of x, y coordinates and possibility flags
+   */
   movesPossible(): MovesResult {
     const x = this.x;
     const y = this.y;
@@ -61,7 +77,10 @@ export default class Pawn {
     return moves;
   }
 
-  // CALCULATING CAPTURES
+  /**
+   * Calculates all possible captures for this pawn
+   * @returns Object containing arrays of x, y coordinates and possibility flags
+   */
   capturesPossible(): MovesResult {
     const x = this.x;
     const y = this.y;

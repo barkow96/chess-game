@@ -18,6 +18,14 @@ export class UIManager {
   private chessQuotes: ChessQuotes;
   private onResetCallback: () => void;
 
+  /**
+   * Creates a new UI manager
+   * @param containerDiv - Main container element for the chess board
+   * @param resultDiv - Element for displaying game results
+   * @param infoDiv - Element for displaying game information
+   * @param gameState - The current game state
+   * @param onResetCallback - Callback function to reset the game
+   */
   constructor(
     containerDiv: HTMLDivElement,
     resultDiv: HTMLDivElement,

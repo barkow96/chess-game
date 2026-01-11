@@ -15,6 +15,13 @@ export class Engine {
   private uiManager: UIManager;
   private talesDivs: NodeListOf<HTMLDivElement>;
 
+  /**
+   * Creates a new chess game engine instance
+   * @param containerDiv - Main container element for the chess board
+   * @param resultDiv - Element for displaying game results
+   * @param infoDiv - Element for displaying game information
+   * @param talesDivs - Collection of all chess board square elements
+   */
   constructor(
     containerDiv: HTMLDivElement,
     resultDiv: HTMLDivElement,
@@ -52,7 +59,8 @@ export class Engine {
   }
 
   /**
-   * Handles click events on the board
+   * Handles click events on the chess board
+   * @param event - The click event triggered by user interaction
    */
   performAction(event: Event): void {
     const div = (event as any).composedPath()[0] as HTMLDivElement;

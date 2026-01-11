@@ -8,12 +8,18 @@ import { GameState } from "./GameState";
 export class AttackDetector {
   private gameState: GameState;
 
+  /**
+   * Creates a new attack detector
+   * @param gameState - The current game state
+   */
   constructor(gameState: GameState) {
     this.gameState = gameState;
   }
 
   /**
    * Finds all spots that are under attack by the opponent
+   * @param player - The player whose threatened squares should be found
+   * @returns Object containing arrays of x and y coordinates of attacked spots
    */
   findAttackedSpots(player: Player): AttackedSpots {
     const color = player.color;
@@ -43,6 +49,8 @@ export class AttackDetector {
 
   /**
    * Finds the king piece for a given player
+   * @param player - The player whose king should be found
+   * @returns The king piece object
    */
   findKing(player: Player): Piece {
     let king: Piece | undefined;
@@ -63,6 +71,8 @@ export class AttackDetector {
 
   /**
    * Calculates how many pieces are attacking the player's king
+   * @param player - The player whose king is being checked
+   * @returns The number of pieces attacking the king
    */
   calculateAttackersNumber(player: Player): number {
     const king = this.findKing(player);

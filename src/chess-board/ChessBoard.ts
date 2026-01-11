@@ -8,16 +8,25 @@ import Rook from "../pieces/Rook";
 import { Color, Piece, PieceName, Pole } from "../pieces/pieces.types";
 import Player from "../player/Player";
 
-//CLASS THAT REPRESENTS THE CHESSBOARD
+/**
+ * Represents the chess board with all squares and pieces
+ */
 export default class ChessBoard {
   poles: Pole[][];
 
+  /**
+   * Creates a new chess board
+   * @param tales - Collection of DOM elements representing the board squares
+   */
   constructor(tales: NodeListOf<Element>) {
     this.poles = new Array(8);
     this.prepare(tales);
   }
 
-  //PLACING PIECES ON THE CHESSBOARD
+  /**
+   * Initializes the board with pieces in starting positions
+   * @param tales - Collection of DOM elements representing the board squares
+   */
   prepare(tales: NodeListOf<Element>): void {
     for (let i = 0; i < this.poles.length; i++)
       this.poles[i] = new Array(this.poles.length);
@@ -92,17 +101,33 @@ export default class ChessBoard {
     }
   }
 
-  //ADDING AN AVATAR OF A FIGURE
+  /**
+   * Adds a CSS class to display a piece's avatar on the board
+   * @param name - The name/type of the piece
+   * @param color - The color of the piece
+   * @param x - The x coordinate (0-7)
+   * @param y - The y coordinate (0-7)
+   */
   addClass(name: PieceName, color: Color, x: number, y: number): void {
     this.poles[y][x].tale.classList.add("tale-" + name + "-" + color);
   }
 
-  //REMOVING AN AVATAR OF A FIGURE
+  /**
+   * Removes a CSS class to hide a piece's avatar from the board
+   * @param name - The name/type of the piece
+   * @param color - The color of the piece
+   * @param x - The x coordinate (0-7)
+   * @param y - The y coordinate (0-7)
+   */
   removeClass(name: PieceName, color: Color, x: number, y: number): void {
     this.poles[y][x].tale.classList.remove("tale-" + name + "-" + color);
   }
 
-  //ACTIVATING A SQUARE (POSSIBLE TO CLICK)
+  /**
+   * Activates a square to make it clickable
+   * @param x - The x coordinate (0-7)
+   * @param y - The y coordinate (0-7)
+   */
   activate(x: number, y: number): void {
     if (!this.poles[y][x].activated) {
       this.poles[y][x].activated = true;
@@ -113,14 +138,21 @@ export default class ChessBoard {
     this.poles[y][x].activated = true;
   }
 
-  //HIGHLIGHTNING A SQUARE
+  /**
+   * Highlights a square to show it as a possible move
+   * @param x - The x coordinate (0-7)
+   * @param y - The y coordinate (0-7)
+   */
   highlight(x: number, y: number): void {
     if ((x + y) % 2 == 0)
       this.poles[y][x].tale.style.backgroundColor = "#964b00";
     else this.poles[y][x].tale.style.backgroundColor = "#808080";
   }
 
-  //ACTIVATING PLAYER'S PIECES
+  /**
+   * Activates all pieces belonging to a player
+   * @param player - The player whose pieces should be activated
+   */
   activatePlayer(player: Player): void {
     this.poles.forEach((row) => {
       row.forEach((pole) => {
@@ -129,7 +161,11 @@ export default class ChessBoard {
     });
   }
 
-  //DEACTIVATING A SQUARE (NOT POSSIBLE TO CLICK)
+  /**
+   * Deactivates a square to make it non-clickable
+   * @param x - The x coordinate (0-7)
+   * @param y - The y coordinate (0-7)
+   */
   deactivate(x: number, y: number): void {
     if (this.poles[y][x].activated) {
       this.poles[y][x].tale.classList.remove("pointer");
@@ -141,7 +177,10 @@ export default class ChessBoard {
     this.poles[y][x].activated = false;
   }
 
-  //DEACTIVATING PLAYER'S PIECES
+  /**
+   * Deactivates all pieces belonging to a player
+   * @param player - The player whose pieces should be deactivated
+   */
   deactivatePlayer(player: Player): void {
     this.poles.forEach((row) => {
       row.forEach((pole) => {
@@ -150,7 +189,9 @@ export default class ChessBoard {
     });
   }
 
-  //DEACTIVATING ALL SQUARES
+  /**
+   * Deactivates all squares on the board
+   */
   deactivateAll(): void {
     this.poles.forEach((row) => {
       row.forEach((pole) => {

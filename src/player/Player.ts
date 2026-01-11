@@ -1,6 +1,8 @@
 import { Color } from "../pieces/pieces.types";
 
-//CLASS THAT REPRESENTS A PLAYER
+/**
+ * Represents a player in the chess game
+ */
 export default class Player {
   color: Color;
   firstClick: boolean;
@@ -10,6 +12,10 @@ export default class Player {
   check: boolean;
   checkMate: boolean;
 
+  /**
+   * Creates a new player
+   * @param color - The color of the player's pieces ("W" for white, "B" for black)
+   */
   constructor(color: Color) {
     this.color = color;
     this.firstClick = true;

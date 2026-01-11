@@ -1,12 +1,21 @@
 import Pawn from "./Pawn";
 import type { ChessBoardType, MovesResult, Color } from "./pieces.types";
 
-// CLASS THAT REPRESENTS A KNIGHT
+/**
+ * Represents a knight piece in chess
+ * Moves in an L-shape pattern
+ */
 export default class Knight extends Pawn {
   directions: string[];
   dx: number[];
   dy: number[];
 
+  /**
+   * Creates a new knight piece
+   * @param x - The x coordinate (0-7)
+   * @param y - The y coordinate (0-7)
+   * @param chessBoard - Reference to the chess board
+   */
   constructor(x: number, y: number, chessBoard: ChessBoardType) {
     super(x, y, chessBoard);
     this.name = "k";
@@ -24,7 +33,10 @@ export default class Knight extends Pawn {
     this.dy = [-2, -1, +2, +1, +2, +1, -2, -1];
   }
 
-  // CALCULATING MOVES
+  /**
+   * Calculates all possible moves for this knight
+   * @returns Object containing arrays of x, y coordinates and possibility flags
+   */
   movesPossible(): MovesResult {
     const x = this.x;
     const y = this.y;
@@ -51,7 +63,10 @@ export default class Knight extends Pawn {
     return moves;
   }
 
-  // CALCULATING CAPTURES
+  /**
+   * Calculates all possible captures for this knight
+   * @returns Object containing arrays of x, y coordinates and possibility flags
+   */
   capturesPossible(): MovesResult {
     const x = this.x;
     const y = this.y;
