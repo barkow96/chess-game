@@ -1,6 +1,6 @@
-import ChessBoard from "./ChessBoard";
-import Player from "./Player";
+import ChessBoard from "./chess-board/ChessBoard.js";
 import Queen from "./pieces/Queen";
+import Player from "./player/Player";
 
 //ELEMENTS SELECTORS
 const containerDiv = document.querySelector(".container");

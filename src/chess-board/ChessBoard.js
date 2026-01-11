@@ -1,10 +1,10 @@
-import performAction from "./main";
-import Bishop from "./pieces/Bishop";
-import King from "./pieces/King";
-import Knight from "./pieces/Knight";
-import Pawn from "./pieces/Pawn";
-import Queen from "./pieces/Queen";
-import Rook from "./pieces/Rook";
+import performAction from "../main";
+import Bishop from "../pieces/Bishop";
+import King from "../pieces/King";
+import Knight from "../pieces/Knight";
+import Pawn from "../pieces/Pawn";
+import Queen from "../pieces/Queen";
+import Rook from "../pieces/Rook";
 
 //CLASS THAT REPRESENTS THE CHESSBOARD
 export default class ChessBoard {
