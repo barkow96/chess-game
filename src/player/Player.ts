@@ -11,6 +11,7 @@ export class Player {
   pieces: number;
   check: boolean;
   checkMate: boolean;
+  staleMate: boolean;
 
   /**
    * Creates a new player
@@ -24,5 +25,6 @@ export class Player {
     this.pieces = 16;
     this.check = false;
     this.checkMate = false;
+    this.staleMate = false;
   }
 }

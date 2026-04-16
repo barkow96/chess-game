@@ -354,7 +354,11 @@ export class MoveHandler {
       if (!capturePrevention && !blockPrevention && !movePrevention)
         oppPlayer.checkMate = true;
       else oppPlayer.check = true;
-    } else oppPlayer.check = false;
+    } else {
+      oppPlayer.check = false;
+      if (this.checkDetector.isStalemate(oppPlayer))
+        oppPlayer.staleMate = true;
+    }
 
     if (this.checkDetector.isChecked(currPlayer)) currPlayer.checkMate = true;
   }
