@@ -169,6 +169,74 @@ export class CheckDetector {
   }
 
   /**
+   * Checks if a player is in stalemate (no legal moves, but not in check)
+   * @param player - The player to check for stalemate
+   * @returns True if the player has no legal moves and is not in check
+   */
+  isStalemate(player: Player): boolean {
+    if (this.isChecked(player)) return false;
+
+    const cb = this.gameState.cb;
+    const attackedSpots = this.attackDetector.findAttackedSpots(player);
+
+    for (const row of cb.poles) {
+      for (const pole of row) {
+        if (pole.figure === "0" || pole.color !== player.color) continue;
+
+        const figure = pole.figure as Piece;
+        const actions = this.calculateTotalActions(
+          figure.movesPossible(),
+          figure.capturesPossible(),
+        );
+        const actionsCount = actions.x.length;
+
+        if (figure.name === "K") {
+          for (let i = 0; i < actionsCount; i++) {
+            const isAttacked = attackedSpots.x.some(
+              (ax, j) =>
+                ax === actions.x[i] && attackedSpots.y[j] === actions.y[i],
+            );
+            if (!isAttacked) return false;
+          }
+        } else {
+          const srcX = figure.x;
+          const srcY = figure.y;
+
+          for (let i = 0; i < actionsCount; i++) {
+            const destX = actions.x[i];
+            const destY = actions.y[i];
+            const savedFigure = cb.poles[destY][destX].figure;
+            const savedColor = cb.poles[destY][destX].color;
+
+            cb.poles[destY][destX].figure = figure;
+            (cb.poles[destY][destX].figure as Piece).setPosition(destX, destY);
+            cb.poles[destY][destX].color = player.color;
+            cb.poles[srcY][srcX].figure = "0";
+            cb.poles[srcY][srcX].color = "0";
+
+            const stillInCheck = this.isChecked(player);
+
+            cb.poles[destY][destX].figure = savedFigure;
+            if (savedFigure !== "0")
+              (cb.poles[destY][destX].figure as Piece).setPosition(
+                destX,
+                destY,
+              );
+            cb.poles[destY][destX].color = savedColor;
+            cb.poles[srcY][srcX].figure = figure;
+            (cb.poles[srcY][srcX].figure as Piece).setPosition(srcX, srcY);
+            cb.poles[srcY][srcX].color = player.color;
+
+            if (!stillInCheck) return false;
+          }
+        }
+      }
+    }
+
+    return true;
+  }
+
+  /**
    * Calculates total possible actions (moves + captures)
    * @param moves - The possible moves
    * @param captures - The possible captures

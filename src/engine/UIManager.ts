@@ -105,6 +105,14 @@ export class UIManager {
         this.containerDiv.classList.add("pointer");
         this.resultDiv.innerHTML = "Click the chessboard to play again!";
       }
+      if (player.staleMate) {
+        text = "STALEMATE! It's a draw!";
+
+        this.gameState.cb.deactivateAll();
+        this.containerDiv.addEventListener("click", this.onResetCallback, true);
+        this.containerDiv.classList.add("pointer");
+        this.resultDiv.innerHTML = "Click the chessboard to play again!";
+      }
     }
 
     if (text != "") this.infoDiv.innerHTML = text;
